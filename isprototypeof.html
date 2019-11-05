@@ -1,0 +1,72 @@
+<script src="../tinytest.js"></script>   
+
+<script>
+
+// function isPrototypeOf(prototype, object) {
+//   if (Object.getPrototypeOf(object) === null) {
+//     return false;
+//   }
+//   return Object.getPrototypeOf(object) === prototype;
+// };
+
+function isPrototypeOf(prototype, object) {
+  //stop checking when you get null for the prototype OR when the object's prototype matches
+  var proto = Object.getPrototypeOf(object); 
+  while (proto !== null && proto !== prototype) {
+    proto = Object.getPrototypeOf(proto);
+  }
+  //return true if proto equals prototype or else return false
+  if (proto === prototype) {
+    return true;
+  } else {
+    return false;
+  }
+};
+tests({
+  'It should return true if prototype checking for is directly linked.': function () {
+    var dog = {
+      fecth: function() {
+      console.log('fetch');
+      }
+    };
+    
+    var myDog = Object.create(dog);
+    var result = isPrototypeOf(dog, myDog);
+    eq(result, true);
+  },
+  'It should return false for isPrototypeOf(dog, empty).': function () {
+    var canine = {
+      bark: function() {
+      console.log('bark');
+        }
+    };
+    var dog = Object.create(canine);
+    dog.fetch = function() {
+      console.log('fetch');
+    };
+    var empty = Object.create(null);
+    var result = isPrototypeOf(dog, empty);
+    eq(result, false);
+  },
+  'It should return true for a prototype link.': function () {
+    var canine = {
+      bark: function() {
+      console.log('bark');
+        }
+    };
+
+    var dog = Object.create(canine);
+    dog.fetch = function() {
+      console.log('fetch');
+    };
+
+    var myDog = Object.create(dog);
+    var empty = Object.create(null);
+    var result = isPrototypeOf(canine, myDog);
+    eq(result, true);
+  }
+}); 
+</script>
+
+
+
